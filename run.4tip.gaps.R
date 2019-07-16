@@ -2,9 +2,13 @@
 
 require(phangorn)
 
-run.4tip.gaps <- function(int.bl = 0.01, prop.extbl = 1, seqlen = 1000, gaps.prop = 0.1, homgaps = T, tempname = "temp.alignment.fasta", iqpath = "/Users/roblanfear/Dropbox/Projects_Current/magic_trees/iqtree", phymlpath = "/Users/roblanfear/Dropbox/Projects_Current/magic_trees/iqtree", savealignment = T){
+run.4tip.gaps <- function(int.bl = 0.1, ext.bl = 0.1, seqlen = 1000, gaps.prop = 0.0, homgaps = T, savealignment = T, run_ID, iqpath){
+
+	# make tree A
 	tr <- read.tree(text = "((t1,t2),t3,t4);")
-	tr$edge.length <- c(int.bl, rep(int.bl*prop.extbl, 4))
+	tr$edge.length <- c(int.bl, rep(ext.bl, 4))
+
+	# make the alignment
 	al <- as.character(as.matrix(as.DNAbin(simSeq(tr, l = seqlen))))
 	if(gaps.prop > 0){
 		ngapsites <- round(seqlen * gaps.prop)
@@ -16,22 +20,11 @@ run.4tip.gaps <- function(int.bl = 0.01, prop.extbl = 1, seqlen = 1000, gaps.pro
 		}
 	}
 	al <- as.DNAbin(al)
-	write.dna(al, file = tempname, format = "fasta")
-	#return(al)
-	temptree <- tr
-	temptree$edge.length <- NULL
+	write.dna(al, file = run_ID, format = "fasta")
 
-	iqres <- try(runIQtree(tempname, format = 'fasta', aadata = F, tempname, iqtreePath = iqpath, model = 'JC'))
-	
-	#phymlres <- try(runPhyML(tempname, format = 'fasta', aadata = F, tempname, phymlPath = phymlpath, model = 'JC'))
 
-	trees = list(tr, iqres$tree)
-	class(trees) <- "multiPhylo"
+	# run IQ-TREE
+	iqres <- try(runIQtree(iqpath, run_ID))
 
-	print(trees[[1]])
-	print(trees[[2]])
-
-	if(!savealignment) system(paste0("rm ", tempname))
-	res <- list(simulated.tree = tr, iqtree.results = iqres, topdist = RF.dist(trees))
-	return(res)
+	return(iqres)
 }
