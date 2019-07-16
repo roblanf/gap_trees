@@ -9,10 +9,10 @@ setwd("/Users/roblanfear/Dropbox/Projects_Current/magic_trees/simulations")
 # set the parameters you like
 
 # internal branch length
-int_brlen = seq(0.00, 0.04, by=0.01) 
+int.bl = seq(0.00, 0.04, by=0.01) 
 
 # external branch length
-ext_brlen = seq(0, 0, by = 0.1) # careful, this is a propotion of the int_brlen
+ext.bl = seq(0.00, 0.04, by = 0.01) 
 
 # proportion of gaps
 prop_gaps = seq(0.01, 0.99, by = 0.01)
@@ -27,7 +27,7 @@ reps = seq(1:9)
 homologous = c(TRUE)
 
 # set up a table of all parameters
-paramstable = expand.grid("int" = int_brlen, "ext" = ext_brlen, "gaps" = prop_gaps, "hom" = homologous, "rep" = reps)
+paramstable = expand.grid("int" = int.bl, "ext" = ext.bl, "gaps" = prop_gaps, "hom" = homologous, "rep" = reps)
 
 nrow(paramstable)
 
@@ -40,7 +40,7 @@ source("run.4tip.gaps.R")
 # here's a wrapper to run a single row of the parameter table
 run.scenario <- function(row){
     print(row)
-    res <- run.4tip.gaps(int.bl = row[[1]], prop.extbl = row[[2]], seqlen = 1000, gaps.prop = row[[3]], homgaps = row[[4]])
+    res <- run.4tip.gaps(int.bl = row[[1]], ext.bl = row[[2]], seqlen = 1000, gaps.prop = row[[3]], homgaps = row[[4]])
     res = c(row, "rfdist" = res$topdist[[1]])
     return(res)      
 }
