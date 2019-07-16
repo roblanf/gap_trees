@@ -32,6 +32,7 @@ runIQtree <- function(iqtreePath, run_ID){
     # 14-16. The t2 branch length of the A, B, and C trees
     # 17-19. The t3 branch length of the A, B, and C trees
     # 20-22. The t4 branch length of the A, B, and C trees 
+    # 23. The software used to run this, i.e. 'iqtree' (this so we can easily rbind results from different software later)
 
 
 
