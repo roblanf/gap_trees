@@ -74,4 +74,3 @@ ggplot(e, aes(x = gaps, y = proportion_trees_wrong, colour = as.factor(int), gro
 ggplot(e, aes(x = gaps, y = proportion_trees_wrong, colour = as.factor(int), group = as.factor(int))) + geom_point() + geom_line()
 
 ggplot(e, aes(x = gaps, y = int, fill = proportion_trees_wrong)) + geom_tile() + scale_fill_viridis()
-

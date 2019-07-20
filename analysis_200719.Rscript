@@ -1,0 +1,63 @@
+library(ggplot2)
+library(dplyr)
+library(parallel)
+library(viridis)
+
+setwd("/Users/roblanfear/Dropbox/Projects_Current/magic_trees/simulations")
+
+
+# set the parameters you like
+
+# internal branch length
+int.bl = seq(0.00, 0.04, by=0.01) 
+
+# external branch length
+ext.bl = seq(0.00, 0.04, by = 0.01) 
+
+# proportion of gaps
+prop_gaps = seq(0.01, 0.99, by = 0.1)
+
+# replicates
+reps = seq(1:2)
+
+# are gaps homologous or not
+# homologous is like
+# sp_a ------AACGTGCA
+# sp_b ------AACGTGCA
+homologous = c(TRUE)
+
+# set up a table of all parameters
+paramstable = expand.grid("int" = int.bl, "ext" = ext.bl, "gaps" = prop_gaps, "hom" = homologous, "rep" = reps)
+
+nrow(paramstable)
+
+# get the other functions
+source("runIQtree.R")
+source("runPhyML.R")
+source("run.4tip.gaps.R")
+
+# now we get a giant list of the results
+tabresults <- lapply(1:nrow(paramstable), function(x) run.4tip.gaps(int.bl = paramstable[x, 1], ext.bl = paramstable[x, 2], seqlen = 1000, gaps.prop = paramstable[x, 3], homgaps = paramstable[x, 4], run_ID = paste0(paramstable[x,], collapse = "_"), iqpath = "~/Desktop/Software/iqtree-1.7-beta9-MacOSX/bin/iqtree", forceNonMonotypic = T) )
+
+
+d = as.data.frame(do.call(rbind, tabresults))
+
+d[,c(2,3,5,6,8:25)] <- apply(d[,c(2,3,5,6,8:25)], 2, as.numeric)
+
+save(tabresults, file = "tabresults.Rdata")
+
+#### Up to here the analyses seem to work. The plots below have not yet been tested.
+
+# dumb plot
+ggplot(d, aes(x = gaps, y = rfdist)) + geom_point()
+
+
+e = d %>% group_by(int, ext, gaps, hom) %>% summarise(proportion_trees_wrong = sum(tree_error)/n(), n_successes = n()) 
+
+
+ggplot(e, aes(x = gaps, y = proportion_trees_wrong, colour = as.factor(int), group = as.factor(int))) + geom_smooth()
+
+ggplot(e, aes(x = gaps, y = proportion_trees_wrong, colour = as.factor(int), group = as.factor(int))) + geom_point() + geom_line()
+
+ggplot(e, aes(x = gaps, y = int, fill = proportion_trees_wrong)) + geom_tile() + scale_fill_viridis()
+
