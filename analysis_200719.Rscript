@@ -35,9 +35,12 @@ nrow(paramstable)
 source("runIQtree.R")
 source("runPhyML.R")
 source("run.4tip.gaps.R")
+source("pis.R")
+
+# at this point we can consider moving to another folder
 
 # now we get a giant list of the results
-tabresults <- lapply(1:nrow(paramstable), function(x) run.4tip.gaps(int.bl = paramstable[x, 1], ext.bl = paramstable[x, 2], seqlen = 1000, gaps.prop = paramstable[x, 3], homgaps = paramstable[x, 4], run_ID = paste0(paramstable[x,], collapse = "_"), iqpath = "~/Desktop/Software/iqtree-1.7-beta9-MacOSX/bin/iqtree", forceNonMonotypic = T) )
+tabresults <- lapply(1:nrow(paramstable), function(x) run.4tip.gaps(int.bl = paramstable[x, 1], ext.bl = paramstable[x, 2], seqlen = 1000, gaps.prop = paramstable[x, 3], homgaps = paramstable[x, 4], savealignment = T, run_ID = paste0(paramstable[x,], collapse = "_"), iqpath = "~/Desktop/Software/iqtree-1.7-beta9-MacOSX/bin/iqtree", forceNonMonotypic = T) )
 
 
 d = as.data.frame(do.call(rbind, tabresults))

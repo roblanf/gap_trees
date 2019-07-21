@@ -25,7 +25,7 @@ run.4tip.gaps <- function(int.bl = 0.1, ext.bl = 0.1, seqlen = 1000, gaps.prop =
 
 	al <- makeAl(tr, seqlen, gaps.prop, homgaps)
 	
-	while(forceNonMonotypic && length(seg.sites(al)) == 0) al <- makeAl(tr, seqlen, gaps.prop, homgaps)
+	while(forceNonMonotypic && pis(al, what = "abs") == 0) al <- makeAl(tr, seqlen, gaps.prop, homgaps)
 	write.dna(al, file = paste0(run_ID, ".fasta"), format = "fasta")
 
 	# run IQ-TREE
