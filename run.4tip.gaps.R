@@ -32,6 +32,8 @@ run.4tip.gaps <- function(int.bl = 0.1, ext.bl = 0.1, seqlen = 1000, gaps.prop =
 	iqres <- try(runIQtree(iqpath, run_ID))
 	
 	if(!savealignment) system(paste0("rm ", run_ID, ".fasta"))
+	
+	iqres <- c(intBl = int.bl, extBl = ext.bl, gapProp = gaps.prop, gapHomol = homgaps, iqres)
 
 	return(iqres)
 }

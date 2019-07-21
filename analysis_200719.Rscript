@@ -45,14 +45,14 @@ tabresults <- lapply(1:nrow(paramstable), function(x) run.4tip.gaps(int.bl = par
 
 d = as.data.frame(do.call(rbind, tabresults))
 
-d[,c(2,3,5,6,8:25)] <- apply(d[,c(2,3,5,6,8:25)], 2, as.numeric)
+d[,c(1:3,6:7,9:10,12:29)] <- apply(d[,c(1:3,6:7,9:10,12:29)], 2, as.numeric)
 
 save(tabresults, file = "tabresults.Rdata")
 
 #### Up to here the analyses seem to work. The plots below have not yet been tested.
 
 # dumb plot
-ggplot(d, aes(x = gaps, y = rfdist)) + geom_point()
+ggplot(d, aes(x = gapProp, y = rfdist)) + geom_point()
 
 
 e = d %>% group_by(int, ext, gaps, hom) %>% summarise(proportion_trees_wrong = sum(tree_error)/n(), n_successes = n()) 
