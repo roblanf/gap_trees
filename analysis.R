@@ -10,16 +10,16 @@ iqpath = "/Users/roblanfear/Documents/github/gap_trees/iqtree"
 # set the parameters you like
 
 # internal branch length
-int.bl = seq(0.00, 0.004, by=0.002) 
+int.bl = seq(0.00, 0.010, by=0.001) 
 
 # external branch length
 ext.bl = seq(0.00, 0.00, by = 0.01) 
 
 # proportion of gaps
-prop_gaps = seq(0.990, 0.999, by = 0.001)
+prop_gaps = seq(0.0, 0.99, by = 0.001)
 
 # replicates
-reps = seq(1:20)
+reps = seq(1:100)
 
 # force alignments to be variable
 forceVarialbe = c(TRUE, FALSE)
@@ -90,5 +90,7 @@ ggplot(e, aes(x = gapProp, y = intBl, fill = proportion_true)) +
     geom_tile() + 
     scale_fill_viridis() +
     facet_grid(forceVarialbe~.)
+
+ggplot(d, aes(x = intBl, y = parsInfSites)) + geom_smooth() + geom_jitter() + facet_grid(forceVarialbe~.)
 
 
