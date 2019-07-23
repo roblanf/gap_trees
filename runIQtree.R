@@ -28,7 +28,7 @@ runIQtree <- function(iqtreePath, run_ID){
     # run IQ-TREE without a tree and with 100 bootstraps, then forcing all three resolutions
     
     iqc <- vector()
-    iqc[1] <- paste0(iqtreePath, " -s ", aln_name, " -m JC -b 100 ", " -pre ", run_ID)
+    iqc[1] <- paste0(iqtreePath, " -s ", aln_name, " -m JC -b 3 ", " -pre ", run_ID)
     iqc[2:4] <- sapply(tr_analysis_ID[2:4], function(x) paste0(iqtreePath, " -s ", aln_name, " -m JC -g ", x, ".tre -pre ", paste0(run_ID, x)))
     for(i in iqc) system(i)
     

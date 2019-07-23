@@ -2,7 +2,15 @@
 
 require(phangorn)
 
-run.4tip.gaps <- function(int.bl = 0.1, ext.bl = 0.1, seqlen = 1000, gaps.prop = 0.0, homgaps = T, savealignment = T, run_ID, iqpath, forceNonMonotypic = F){
+run.4tip.gaps <- function(int.bl = 0.1, 
+						  ext.bl = 0.1, 
+						  seqlen = 1000, 
+						  gaps.prop = 0.0, 
+						  homgaps = T, 
+						  savealignment = F, 
+						  run_ID, 
+						  iqpath, 
+						  forceNonMonotypic = F){
 
 	# make tree A
 	tr <- read.tree(text = "((t1,t2),t3,t4);")
@@ -33,7 +41,11 @@ run.4tip.gaps <- function(int.bl = 0.1, ext.bl = 0.1, seqlen = 1000, gaps.prop =
 	
 	if(!savealignment) system(paste0("rm ", run_ID, ".fasta"))
 	
-	iqres <- c(intBl = int.bl, extBl = ext.bl, gapProp = gaps.prop, gapHomol = homgaps, iqres)
+	iqres <- c(intBl = int.bl, 
+			   extBl = ext.bl, 
+			   gapProp = gaps.prop, 
+			   gapHomol = homgaps, 
+			   forceVarialbe = forceNonMonotypic, iqres)
 
 	return(iqres)
 }
