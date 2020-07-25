@@ -28,8 +28,8 @@ runIQtree <- function(iqtreePath, run_ID){
     # run IQ-TREE without a tree and with 100 bootstraps, then forcing all three resolutions
     
     iqc <- vector()
-    iqc[1] <- paste0(iqtreePath, " -s ", aln_name, " -m JC -b 3 ", " -pre ", run_ID)
-    iqc[2:4] <- sapply(tr_analysis_ID[2:4], function(x) paste0(iqtreePath, " -s ", aln_name, " -m JC -g ", x, ".tre -pre ", paste0(run_ID, x)))
+    iqc[1] <- paste0(iqtreePath, " -blmin 1e-10 -s ", aln_name, " -m JC -b 3 ", " -redo -pre ", run_ID)
+    iqc[2:4] <- sapply(tr_analysis_ID[2:4], function(x) paste0(iqtreePath, " -blmin 1e-10 -s ", aln_name, " -m JC -g ", x, ".tre -redo -pre ", paste0(run_ID, x)))
     for(i in iqc) system(i)
     
     # Extract IQ-TREE output file and tree
@@ -75,7 +75,7 @@ runIQtree <- function(iqtreePath, run_ID){
 	
     # Delete unnecessary output
 	
-    torm <- as.vector(sapply(paste0(run_ID, tr_analysis_ID), function(x) paste0(x, c(".ckp.gz", ".bionj", ".log", ".mldist", ".treefile", ".contree", ".iqtree", ".boottrees", ".parstree"))))
+    torm <- as.vector(sapply(paste0(run_ID, tr_analysis_ID), function(x) paste0(x, c(".ckp.gz", ".log", ".treefile", ".iqtree", ".boottrees"))))
     for(i in torm) system(paste0("rm ", i))
 	
     res <- c(runID = run_ID, parsInfSites = iqc_parsinf, sitePats = iqc_sitepat, searchTree = iqc1treeID, searchlnL = iqc_lik[1], searchBoot = iqc1boot, searchTrStr = iqc1trestring, AlnL = iqc_lik[2], BlnL = iqc_lik[3], ClnL = iqc_lik[4], AintBL = iqc_intbl[1], BintBL = iqc_intbl[2], CintBL = iqc_intbl[3], iqc_extbl, software = software)
